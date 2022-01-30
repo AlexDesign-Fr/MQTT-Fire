@@ -4,7 +4,7 @@ pipeline {
     // ---------------------------------------------------------------------------
     agent none
     environment {
-        PROJECT_NAME = "MQTT-leds-color"
+        PROJECT_NAME = "MQTT-fire"
     }
 	stages {
 		stage('Lancement en parallèle de stages') {
@@ -36,7 +36,6 @@ pipeline {
 					agent { label 'vagrant'}
 					steps {
 						script{
-                            sh 'arduino-cli lib install "OneWire"'
 							sh 'arduino-cli lib install "Adafruit NeoPixel"'
 							sh 'arduino-cli lib install "PubSubClient"'
 							sh 'arduino-cli lib install "WiFiManager"'

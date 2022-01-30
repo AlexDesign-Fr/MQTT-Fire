@@ -1,5 +1,6 @@
-# MQTT Leds Color #
-Programme ESP8266 permettant de faire réagire une barre de leds (leds strip) en fonction d'un message MQTT envoyé par un brocker.
+# MQTT Fire #
+Programme ESP8266 permettant de simuler des flammes de feux pour mettre dans des lampions. 
+La mise en route et l'arret se fait via MQTT.
 
 Le nombre de leds est paramétrable.
 
@@ -25,11 +26,7 @@ Les messages MQTT interprétés doivent être dans les topics:
 
 - lumiere/<DeviceID> [ON|OFF]                : Allumage de la barre de LEDS.
 
-- lumiere/color/<DeviceID> (R,V,B)           : Changement de couleur des LEDS.
-
-- lumiere/animation/<DeviceID>[1/2/3/4/5/6]  : Animation des LEDS.
-
-avec '''DeviceID''' = *portal* ou *barreverticale*
+avec '''DeviceID''' = *fire*
 
 
 ## Gestion des variables ##
@@ -53,9 +50,9 @@ Si aucune connection internet n'est disponbile, les mises à jour ne peuvent pas
 
 
 ## Mise à jour du firmware ##
-Après test et debuggage du sketch *MQTT-leds-color.ino* ou de ses dépendences, il faut:
+Après test et debuggage du sketch *MQTT-Fire.ino* ou de ses dépendences, il faut:
 
-- changer la version dans le sketch ,MQTT-leds-color.ino,
+- changer la version dans le sketch ,MQTT-Fire.ino,
 
 - Mettre le même numéro de version dans un tag de la branche master sur le repo git.
 
@@ -65,11 +62,11 @@ serveur web avec le binaire de la compilation.
 
 ## Mise à jour du file system litteleFS ##
 Si la liste des CA doit être mise à jour, il faut les récupérer avec le script *certs-from-mozilla.py* (en 
-l'executant dans le répertoire du sketch *MQTT-leds-color.ino*) puis mettre à jour la variable 
+l'executant dans le répertoire du sketch *MQTT-Fire.ino*) puis mettre à jour la variable 
 *data/version.txt*, générer le binaire littleFS et mettre ce numéro dans le nom du binaire généré.
 
 Par exemple, actuellement la version du file system est *1.0.1*, on a donc le nom de fichier :
-'''MQTT-leds-color.mklittlefs__1.0.1.bin'''
+'''MQTT-Fire.mklittlefs__1.0.1.bin'''
 
 
 
@@ -102,11 +99,11 @@ Il doit apparaitre un menu Outils > ESP8266 LKittleFS Data uploads. En cliquant 
 
 
 ---
-title: MQTT Leds Color
-subtitle: Changeur de couleur LEDS en fonction de message MQTT
+title: MQTT Fire
+subtitle: Allumage/ extinction de flammes sur des LEDs via messages MQTT.
 lang: fre
 author: Alexandre PERETJATKO
 language: C (Arduino)
 hardware: Node MCU ESP8266
-website: https://git.alex-design.fr/Alex/MQTT-leds-color.git
+website: https://git.alex-design.fr/Alex/MQTT-Fire.git
 ...
