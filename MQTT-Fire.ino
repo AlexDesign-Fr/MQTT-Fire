@@ -31,7 +31,7 @@ WiFiManager wifiManager;
 #define HOSTNAME "ESP8266-"  // Pour la connection Wifi (doit être unique)
 char HostName[16];
 
-// Pour répondre au topic MQTT [portal|barreverticale|fire]
+// Pour répondre au topic MQTT [fire]
 char DeviceID[EEPROM_DEVICEID_SIZE] = "fire";  // N'est pris en compte que si writeToEEPROM = true (car sinon on lit la valeur provenant de l'EEPROM)
 
 
@@ -114,8 +114,6 @@ void setup() {
 
 // **********************************************************************************************************
 // **********************************************************************************************************
-long lastRecu = 0;
-int numled = 0;
 void loop() {
   // On écoute le serveur OTA
   OTA_doUpdate();
@@ -133,10 +131,10 @@ void loop() {
   if (!clientMQTT.connected()) {
     Serial.println("OUPS, on est plus connecté au server MQTT--------------------------");
 
-    //MQTT_connect();
+    MQTT_connect();
 
     // On reboot
-    ESP.restart();
+    //ESP.restart();
   }
   clientMQTT.loop();
 
