@@ -7,12 +7,10 @@
 //
 // Le programme se branche en WIFI sur un broker MQTT et réagi au topics :
 // lumiere/<DeviceID> [ON|OFF]                : Allumage de la barre de LEDS.
-// lumiere/color/<DeviceID> (R,V,B)           : Changement de couleur des LEDS.
-// lumiere/animation/<DeviceID>[1/2/3/4/5/6]  : Animation des LEDS.
 // --------------------------------------------------------------------------------
 
 // Pour une mise en prod, ne pas oublier de mettre writeToEEPROM = false
-const String firmwareActualVersion = "1.0.1";
+const String firmwareActualVersion = "1.0.2";
 const boolean writeToEEPROM = false;  // Si = true, écrit en EEPROM et affiche les traces de debug de wifimanager (default = false)
 
 
