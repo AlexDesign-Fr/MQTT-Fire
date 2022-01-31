@@ -55,6 +55,9 @@ pipeline {
 								sh 'mkdir -p /data/www/html/update/$PROJECT_NAME'
 								sh 'sudo chown alexandre.alexandre -R /data/www/html/update/$PROJECT_NAME'
 
+                                // Ecriture du message du dernier commit
+                                writeFile(file: 'lastGitMessage.txt', text: env.LATEST_MESSAGE)
+
 								// test si le répertoire destination existe déjà
 								echo '*****************************************************************************'
 								def fileName = "/var/www/html/update/$PROJECT_NAME/themes"
@@ -124,8 +127,6 @@ pipeline {
                 script{
                     dir("/data/www/html/update/$PROJECT_NAME/inc"){
                         sh 'pandoc -s README.md  --template ../templateDATA.php -o data.php'
-                        writeFile(file: 'lastGitMessage.txt', text: env.LATEST_MESSAGE)
-
                     }
                 }
             }
