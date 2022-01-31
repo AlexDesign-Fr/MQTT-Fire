@@ -4,6 +4,7 @@
 #define MQTT_user ""
 #define MQTT_password ""
 
+/*
 #define MQTT_DEBUG(message) \
   Serial.print("[DEBUG:"); \
   Serial.print(__func__); \
@@ -12,7 +13,8 @@
   Serial.print(")]-> "); \
   Serial.println(message);
 // Mode prod
-//#define MQTT_DEBUG(message);
+*/
+#define MQTT_DEBUG(message);
 
 
 // DEFINITION DES TOPICS POUR CE MODULE -------------------------------------------
@@ -133,11 +135,13 @@ void MQTT_callback(char* topic, byte* payload, unsigned int length) {
       MQTT_DEBUG("Allumage les leds");
       MQTT_publishDebug("MQTT_callback> Allumage les leds ");
       LED_fireStart();
+      g_BOO_Animation = true;
 
     } else if ( String( message ) == "OFF") {
       MQTT_DEBUG("Extinction des leds");
       MQTT_publishDebug("MQTT_callback> Extinction les leds ");
       LED_fireStop();
+      g_BOO_Animation = false;
     }
   }
 }

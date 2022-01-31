@@ -43,7 +43,7 @@ int LED_COUNT = 5;  // N'est pris en compte que si writeToEEPROM = true (car sin
 
 
 // LEDS
-boolean g_BOO_AnimationSeconde = true;
+boolean g_BOO_Animation = true;
 #include "leds.h"
 
 
@@ -99,6 +99,7 @@ void setup() {
   // Initialisation des leds .....................................................
   strip.begin();  // INITIALIZE NeoPixel strip object
   strip.show();   // Turn OFF all pixels ASAP
+  LED_fireStart();
 
 
   Serial.println("************************** Tout est initialise");
@@ -139,8 +140,9 @@ void loop() {
   }
   clientMQTT.loop();
 
-
-  LED_fireStart();
+  if( g_BOO_Animation ) {
+    LED_fireStart();
+  }
 
 
   // Traitement des Messages MQTT ...................................................

@@ -107,4 +107,6 @@ uint32_t NeoFire::Substract(uint32_t color1, uint32_t color2) {
 void NeoFire::Clear() {
   for (uint16_t i = 0; i < strip.numPixels (); i++)
     strip.setPixelColor(i, off_color);
+
+  strip.show();    
 }
