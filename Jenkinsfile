@@ -4,7 +4,7 @@ pipeline {
     // ---------------------------------------------------------------------------
     agent none
     environment {
-        PROJECT_NAME = "MQTT-fire"
+        PROJECT_NAME = "MQTT-Fire"
     }
 	stages {
 		stage('Lancement en parallèle de stages') {
@@ -17,7 +17,9 @@ pipeline {
 							echo 'Récupération des sources pour avoir le tag de la version'
 							checkout scm
 							latestTag = sh(returnStdout:  true, script: "git describe --tags --abbrev=0").trim()
+                            latestMessage = sh(returnStdout:  true, script: "git log --format=format:%s -1").trim()
 							env.BUILD_VERSION = latestTag
+                            env.LATEST_MESSAGE = latestMessage
 							echo '*****************************************************************************'
 						}
 					}
@@ -122,6 +124,8 @@ pipeline {
                 script{
                     dir("/data/www/html/update/$PROJECT_NAME/inc"){
                         sh 'pandoc -s README.md  --template ../templateDATA.php -o data.php'
+                        writeFile(file: 'lastGitMessage.txt', text: env.LATEST_MESSAGE)
+
                     }
                 }
             }
