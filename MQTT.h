@@ -1,12 +1,9 @@
 // MQTT client
 #include <PubSubClient.h>
 #define mqtt_broker "192.168.0.11"
-#define topic_temperature "sensor/temperature"  //Topic température
-#define topic_batterie "sensor/batterie"        //Topic batterie
 #define MQTT_user ""
 #define MQTT_password ""
 
-/*
 #define MQTT_DEBUG(message) \
   Serial.print("[DEBUG:"); \
   Serial.print(__func__); \
@@ -15,8 +12,7 @@
   Serial.print(")]-> "); \
   Serial.println(message);
 // Mode prod
-*/
-#define MQTT_DEBUG(message);
+//#define MQTT_DEBUG(message);
 
 
 // DEFINITION DES TOPICS POUR CE MODULE -------------------------------------------
@@ -114,8 +110,6 @@ void MQTT_connect() {
 // --------------------------------------------------------------------------------
 // Déclenche les actions à la réception d'un message MQTT.
 // lumiere/portal [ON|OFF]               : Allumage de la barre de LEDS.
-// lumiere/portal/color [#RRVVBB]        : Changement de couleur des LEDS.
-// lumiere/portal/animation [1/2/3/4/5]  : Animation des LEDS.
 //
 void MQTT_callback(char* topic, byte* payload, unsigned int length) {
 
@@ -138,53 +132,13 @@ void MQTT_callback(char* topic, byte* payload, unsigned int length) {
     if ( String( message ) == "ON") {
       MQTT_DEBUG("Allumage les leds");
       MQTT_publishDebug("MQTT_callback> Allumage les leds ");
-      LED_colorWipe(strip.Color(0, 0, 255), 20);
+      LED_fireStart();
 
     } else if ( String( message ) == "OFF") {
       MQTT_DEBUG("Extinction des leds");
       MQTT_publishDebug("MQTT_callback> Extinction les leds ");
-      LED_colorWipe(strip.Color(0, 0, 0), 20);
+      LED_fireStop();
     }
-    
-    g_BOO_AnimationSeconde = false;
-
-
-    // ................................................................................
-  } else if ( strcmp( topic, topic_lumiere_color) == 0) {
-    MQTT_DEBUG("Detection du topics :" + String( topic_lumiere_color ));
-
-    // Test si on a une couleur RGB dans le message
-    if ( LED_isAColor( message ) ) {
-      // Définition de la couleur
-      Couleur c;
-      c = LED_ExtractRVB( message );
-      MQTT_DEBUG("Affichage de la couleur : " + String(c.R) + " " + String(c.V) + " " + String(c.B));
-      MQTT_publishDebug("MQTT_callback> Affichage de la couleur : " + String(c.R) + " " + String(c.V) + " " + String(c.B));
-
-
-      // Changemnt des LEDS avec la couleur
-      LED_colorWipe(strip.Color(c.R, c.V, c.B), 20);
-    }
-
-    // ................................................................................
-  } else if ( strcmp( topic, topic_lumiere_bright) == 0 ) {
-    MQTT_DEBUG("Detection du topics :" + String( topic_lumiere_bright ));
-
-    // Test si on a bien une valeur numérique
-    if ( LED_isADigit( message ) ) {
-      MQTT_DEBUG("Luminosite : " + String( message ));
-      MQTT_publishDebug("MQTT_callback> Luminosite : " + String( message ));
-      strip.setBrightness( String( message ).toInt() % 255 );
-      strip.show();
-    }
-
-
-    // ................................................................................
-  } else if ( strcmp( topic, topic_lumiere_anim) ==0 ) {
-    MQTT_DEBUG("Detection du topics :" + String( topic_lumiere_anim ));
-    MQTT_DEBUG("Lancement de l'Animation avec le parametre :" + String( message ));
-    MQTT_publishDebug("MQTT_callback> Lancement de l'Animation avec le parametre :" + String( message ));
-    LED_Animation(String( message ).toInt());
   }
 }
 
@@ -205,7 +159,4 @@ void MQTT_setup(){
 
   // Construction des topcs auxquels s'abonner.
   sprintf( topic_lumiere,         "lumiere/%s", DeviceID);
-  sprintf( topic_lumiere_color,   "lumiere/color/%s", DeviceID);
-  sprintf( topic_lumiere_bright,  "lumiere/brightness/%s", DeviceID);
-  sprintf( topic_lumiere_anim,    "lumiere/animation/%s", DeviceID);
 }

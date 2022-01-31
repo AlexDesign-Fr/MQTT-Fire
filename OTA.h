@@ -43,8 +43,8 @@ const char* OTA_update_path = "/firmware";
 boolean g_BOO_UpdateFirmware = true;
 
 
-const String firmwareUrlMiseAJour   = "https://update.alex-design.fr/MQTT-leds-color/update.php";
-const String fileSystemUrlMiseAJour = "https://update.alex-design.fr/MQTT-leds-color/updateFS.php";
+const String firmwareUrlMiseAJour   = "https://update.alex-design.fr/MQTT-fire/update.php";
+const String fileSystemUrlMiseAJour = "https://update.alex-design.fr/MQTT-fire/updateFS.php";
 //const String firmwareUrlMiseAJour = "http://192.168.0.32:9090/MQTT-leds-color/update.php";  <- Ne peut pas fonctionner car il est en http, et on veut du https
 // Define global variable to know if upate is available
 long OTA_UpdateTimer;

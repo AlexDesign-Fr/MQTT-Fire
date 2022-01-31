@@ -12,8 +12,8 @@
 // --------------------------------------------------------------------------------
 
 // Pour une mise en prod, ne pas oublier de mettre writeToEEPROM = false
-const String firmwareActualVersion = "1.2.18";
-const boolean writeToEEPROM = false; // Si = true, écrit en EEPROM et affiche les traces de debug de wifimanager (default = false)
+const String firmwareActualVersion = "1.0.1";
+const boolean writeToEEPROM = false;  // Si = true, écrit en EEPROM et affiche les traces de debug de wifimanager (default = false)
 
 
 
@@ -28,21 +28,17 @@ WiFiManager wifiManager;
 
 
 // Customisation du nom du module ESP
-#define HOSTNAME "ESP8266-" // Pour la connection Wifi (doit être unique)
+#define HOSTNAME "ESP8266-"  // Pour la connection Wifi (doit être unique)
 char HostName[16];
 
-// Pour répondre au topic MQTT [portal|barreverticale]
-char DeviceID[EEPROM_DEVICEID_SIZE] = "portal"; // N'est pris en compte que si writeToEEPROM = true (car sinon on lit la valeur provenant de l'EEPROM)
+// Pour répondre au topic MQTT [portal|barreverticale|fire]
+char DeviceID[EEPROM_DEVICEID_SIZE] = "fire";  // N'est pris en compte que si writeToEEPROM = true (car sinon on lit la valeur provenant de l'EEPROM)
 
 
 
 // EEPROM ( pour stockage du nombre de leds )
-// ESP 2C:F4:32:77:3C:3B -> 125 leds (chemin de table)
-// ESP 2C:F4:32:77:5F:07 -> 64 leds (barre verticale)
-// ESP 2C:F4:32:77:31:8B -> 63 leds
-// ESP 30:83:98:82:6A:6F -> 10 leds (portal)
-// ESP 192.168.1.71 -> 50 leds (Sapin de noel)
-int LED_COUNT = 10;           // N'est pris en compte que si writeToEEPROM = true (car sinon on lit la valeur provenant de l'EEPROM)
+// 30:83:98:82:6a:6f Support Casque -> 5 leds
+int LED_COUNT = 5;  // N'est pris en compte que si writeToEEPROM = true (car sinon on lit la valeur provenant de l'EEPROM)
 #include "EEPROM.h"
 
 
@@ -68,8 +64,8 @@ void setup() {
   Serial.flush();
   Serial.println("***********************************************************************************");
   Serial.println("OK, let's go **********************************************************************");
-  Serial.println("Version firmware :" + String( firmwareActualVersion ));
-  MQTT_publishDebug("Version firmware :" + String( firmwareActualVersion ) );
+  Serial.println("Version firmware :" + String(firmwareActualVersion));
+  MQTT_publishDebug("Version firmware :" + String(firmwareActualVersion));
 
 
   // Lecture du nombre de leds dans l'EEPROM ........................................
@@ -82,11 +78,13 @@ void setup() {
       Il faut alors se connecter avec un smarthpone sur l'AP pour configurer le Wifi, le NodeMCU
       reboot et se connect avec le SSID et mot de passe saisie.
   */
-  snprintf(HostName, 16, HOSTNAME"%06X", (uint32_t)ESP.getChipId());  // Concaténation du HOSTNAME avec la fin de l'adresse MAC
-  wifiManager.setDebugOutput(writeToEEPROM); // false ->Pour ne plus avoir le mot de passe WIFI qui s'affiche.
+  snprintf(HostName, 16, HOSTNAME "%06X", (uint32_t)ESP.getChipId());  // Concaténation du HOSTNAME avec la fin de l'adresse MAC
+  wifiManager.setDebugOutput(writeToEEPROM);                           // false ->Pour ne plus avoir le mot de passe WIFI qui s'affiche.
   wifiManager.autoConnect(HostName, "123456789");
-  Serial.print("IP address: "); Serial.println(WiFi.localIP());
-  Serial.print("HOSTNAME: "); Serial.println(HostName);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+  Serial.print("HOSTNAME: ");
+  Serial.println(HostName);
   wifiManager.setHostname(HostName);
 
 
@@ -99,12 +97,9 @@ void setup() {
 
 
   // Initialisation des leds .....................................................
-  strip.begin();           // INITIALIZE NeoPixel strip object
-  strip.show();            // Turn OFF all pixels ASAP
-  strip.setBrightness(BRIGHTNESS);
-  LED_colorWipe(strip.Color(255, 0, 0), 20);
-  LED_colorWipe(strip.Color(0, 255, 0), 20);
-  LED_colorWipe(strip.Color(0, 0, 255), 20);
+  strip.begin();  // INITIALIZE NeoPixel strip object
+  strip.show();   // Turn OFF all pixels ASAP
+
 
   Serial.println("************************** Tout est initialise");
   MQTT_publishDebug("--------------------------- Tout est initialise");
@@ -145,22 +140,7 @@ void loop() {
   clientMQTT.loop();
 
 
-
-
-  // Animation des LEDS toutes les secondes .........................................
-  if (millis() - lastRecu > 1000 ) {
-    lastRecu = millis();
-
-    // Allumage d'une led
-    if ( g_BOO_AnimationSeconde ) {
-      if ( numled >= LED_COUNT ) {
-        numled = 0;
-      }
-      LED_AllumeLedNum( numled );
-      numled++;
-    }
-  }
-
+  LED_fireStart();
 
 
   // Traitement des Messages MQTT ...................................................
