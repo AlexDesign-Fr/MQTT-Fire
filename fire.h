@@ -31,7 +31,7 @@ void NeoFire::Draw() {
 
   for (int i = 0; i < LED_COUNT; i++) {
     AddColor(i, fire_color);
-    int r = random(80);
+    int r = random(50);
     uint32_t diff_color = strip.Color ( r, r / 2, r / 2);
     SubstractColor(i, diff_color);
   }

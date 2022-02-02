@@ -33,7 +33,8 @@ NeoFire fire(strip);
 //
 void LED_fireStart(){
   fire.Draw();
-  delay(random(150,300));
+  //delay(random(150,300));
+  delay(random(50,200));
 }
 
 

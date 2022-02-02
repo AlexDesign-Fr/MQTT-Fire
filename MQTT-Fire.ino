@@ -10,7 +10,7 @@
 // --------------------------------------------------------------------------------
 
 // Pour une mise en prod, ne pas oublier de mettre writeToEEPROM = false
-const String firmwareActualVersion = "1.0.2";
+const String firmwareActualVersion = "1.0.3";
 const boolean writeToEEPROM = false;  // Si = true, écrit en EEPROM et affiche les traces de debug de wifimanager (default = false)
 
 
